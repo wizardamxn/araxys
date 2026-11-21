@@ -124,7 +124,7 @@ const ProductMockup = () => {
             <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
             <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
             <div className="ml-4 flex-1 rounded-md bg-zinc-800/60 px-3 py-1 text-center text-[11px] text-zinc-500">
-              teams.app / workspace
+              araxys.amanahmad.xyz / workspace
             </div>
           </div>
 
