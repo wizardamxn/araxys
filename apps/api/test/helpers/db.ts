@@ -7,7 +7,7 @@ let mongod: MongoMemoryServer | undefined;
 /** Real MongoDB for integration tests: TEST_MONGO_URI if set, else an in-memory server. */
 export const startDb = async () => {
   const uri = process.env.TEST_MONGO_URI ?? (mongod = await MongoMemoryServer.create()).getUri();
-  await mongoose.connect(uri, { dbName: `projectteams-test-${process.pid}` });
+  await mongoose.connect(uri, { dbName: `araxys-test-${process.pid}` });
 };
 
 export const clearDb = async () => {

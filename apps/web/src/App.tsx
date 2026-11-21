@@ -99,7 +99,7 @@ const App = () => {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-zinc-950">
         <span className="text-lg font-bold tracking-tight text-white">
-          Project Teams
+          Araxys
         </span>
         <Loader2 className="h-5 w-5 animate-spin text-zinc-600" />
       </div>

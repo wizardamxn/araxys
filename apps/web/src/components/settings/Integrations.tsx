@@ -54,7 +54,7 @@ function SecretNotice({ secret, onClose }: { secret: string; onClose: () => void
         </button>
       </div>
       <p className="mb-3 text-xs text-zinc-400">
-        Copy it now; it won't be shown in full again. Check each request's <code className="text-zinc-300">X-ProjectTeams-Signature</code> header:{" "}
+        Copy it now; it won't be shown in full again. Check each request's <code className="text-zinc-300">X-Araxys-Signature</code> header:{" "}
         <code className="text-zinc-300">t=…,v1=HMAC-SHA256(secret, "t.body")</code>.
       </p>
       <div className="flex items-center gap-2">

@@ -107,7 +107,7 @@ export const safePost = async (url: string, body: string, headers: Record<string
     const res = await request(url, {
       method: "POST",
       body,
-      headers: { "content-type": "application/json", "user-agent": "ProjectTeams-Webhooks/1.0", ...headers },
+      headers: { "content-type": "application/json", "user-agent": "Araxys-Webhooks/1.0", ...headers },
       dispatcher: agent,
       headersTimeout: timeoutMs,
       bodyTimeout: timeoutMs,

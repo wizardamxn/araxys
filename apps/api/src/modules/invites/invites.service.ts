@@ -70,9 +70,9 @@ export const invitesService = {
       const who = validator.escape(ctx.user.fullName);
       await sendMail({
         to: input.email,
-        subject: `${ctx.user.fullName} invited you to ${ctx.workspace.name} on Project Teams`,
-        text: `${ctx.user.fullName} invited you to join "${ctx.workspace.name}" on Project Teams.\n\nJoin here: ${url}\n\nThis invite expires in ${input.expiresInDays} days.`,
-        html: `<p>${who} invited you to join <strong>${ws}</strong> on Project Teams.</p><p><a href="${url}">Join ${ws}</a></p><p>This invite expires in ${input.expiresInDays} days.</p>`,
+        subject: `${ctx.user.fullName} invited you to ${ctx.workspace.name} on Araxys`,
+        text: `${ctx.user.fullName} invited you to join "${ctx.workspace.name}" on Araxys.\n\nJoin here: ${url}\n\nThis invite expires in ${input.expiresInDays} days.`,
+        html: `<p>${who} invited you to join <strong>${ws}</strong> on Araxys.</p><p><a href="${url}">Join ${ws}</a></p><p>This invite expires in ${input.expiresInDays} days.</p>`,
       });
     }
 

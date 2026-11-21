@@ -277,8 +277,8 @@ describe("webhooks", () => {
 
     const { sign } = await import("../../src/modules/webhooks/webhooks.service.js");
     const sent = posts[0]!;
-    const t = Number(/t=(\d+)/.exec(sent.headers["x-projectteams-signature"]!)![1]);
-    expect(sent.headers["x-projectteams-signature"]).toBe(sign(secret, sent.body, t));
+    const t = Number(/t=(\d+)/.exec(sent.headers["x-araxys-signature"]!)![1]);
+    expect(sent.headers["x-araxys-signature"]).toBe(sign(secret, sent.body, t));
   });
 
   it("test pings, logs deliveries, and switches off after repeated failures", async () => {

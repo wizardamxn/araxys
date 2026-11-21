@@ -21,7 +21,7 @@ export interface IWebhook {
   url: string;
   format: WebhookFormat;
   events: WebhookEvent[];
-  /** HMAC key for the X-ProjectTeams-Signature header. */
+  /** HMAC key for the X-Araxys-Signature header. */
   secret: string;
   enabled: boolean;
   createdBy: Types.ObjectId;

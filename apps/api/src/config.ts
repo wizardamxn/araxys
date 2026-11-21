@@ -46,7 +46,7 @@ const schema = z.object({
   GOOGLE_REDIRECT_URI: z.string().url().optional(),
 
   RESEND_API_KEY: z.string().optional(),
-  MAIL_FROM: z.string().default("Project Teams <no-reply@localhost>"),
+  MAIL_FROM: z.string().default("Araxys <no-reply@localhost>"),
 
   AI_MODEL: z.string().default("gemini-2.5-flash"),
   EMBEDDING_MODEL: z.string().default("gemini-embedding-001"),

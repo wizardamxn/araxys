@@ -1,4 +1,4 @@
-# Project Teams
+# Araxys
 
 Team chat, shared docs and an AI knowledge base you can ask questions, in one workspace.
 
@@ -105,7 +105,7 @@ cd apps/api && npm run build && npm run migrate:workspaces
 
 Live editing runs over the existing Socket.IO connection (no extra service). Each edit is stored in `docupdates` and folded into the doc every 200 edits; the doc's plain text, search and AI index update about two seconds after typing stops. With several API processes, turn on `REALTIME_REDIS` so edits reach people connected to other processes.
 
-Webhook deliveries run in the worker with up to 5 retries. Requests are signed with the hook's secret: `X-ProjectTeams-Signature: t=<unix time>,v1=<hex HMAC-SHA256 of "<t>.<raw body>">`. Webhook URLs must be `https` and may not point at private or local addresses (checked after DNS); `WEBHOOKS_ALLOW_PRIVATE=true` lifts that for local testing only.
+Webhook deliveries run in the worker with up to 5 retries. Requests are signed with the hook's secret: `X-Araxys-Signature: t=<unix time>,v1=<hex HMAC-SHA256 of "<t>.<raw body>">`. Webhook URLs must be `https` and may not point at private or local addresses (checked after DNS); `WEBHOOKS_ALLOW_PRIVATE=true` lifts that for local testing only.
 
 ### Upgrading docs
 

@@ -45,7 +45,7 @@ export const authService = {
     const link = `${config.APP_URL.replace(/\/$/, "")}/reset-password?token=${token}`;
     await sendMail({
       to: user.email,
-      subject: "Reset your Project Teams password",
+      subject: "Reset your Araxys password",
       text: `Hi ${user.fullName},\n\nReset your password here (valid for 30 minutes):\n${link}\n\nIf you didn't ask for this, ignore this email.`,
       html: `<p>Hi ${validator.escape(user.fullName)},</p><p><a href="${link}">Reset your password</a> (valid for 30 minutes).</p><p>If you didn't ask for this, ignore this email.</p>`,
     });

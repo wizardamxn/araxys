@@ -34,7 +34,7 @@ type DocLean = {
 };
 
 const docMarkdown = (d: DocLean, author: string) => {
-  const meta = [`<!-- Exported from Project Teams. Author: ${author}. Last edited ${d.updatedAt.toISOString()}. -->`];
+  const meta = [`<!-- Exported from Araxys. Author: ${author}. Last edited ${d.updatedAt.toISOString()}. -->`];
   const body = richTextToMarkdown(d.contentJson ?? plainToRichText(d.content));
   return `${meta.join("\n")}\n\n# ${d.title}\n\n${body}`;
 };
@@ -61,7 +61,7 @@ async function* messageRows(conversationId: Types.ObjectId, names: Map<string, s
   }
 }
 
-const README = (workspace: string, includeFiles: boolean) => `Project Teams export: ${workspace}
+const README = (workspace: string, includeFiles: boolean) => `Araxys export: ${workspace}
 Exported ${new Date().toISOString()}
 
 workspace.json        name and export details
@@ -224,7 +224,7 @@ export const exportService = {
 
     await sendZip(res, `my-project-teams-data-${today()}.zip`, async (zip) => {
       await zip.add(
-        `Your Project Teams data\nExported ${new Date().toISOString()}\n\nprofile.json      your account\nworkspaces.json   workspaces you're in\ndocs/             documents you created, as Markdown\nmessages.jsonl    every message you've sent, in any conversation (one JSON object per line)\ncomments.jsonl    every comment you've left on a doc\n`,
+        `Your Araxys data\nExported ${new Date().toISOString()}\n\nprofile.json      your account\nworkspaces.json   workspaces you're in\ndocs/             documents you created, as Markdown\nmessages.jsonl    every message you've sent, in any conversation (one JSON object per line)\ncomments.jsonl    every comment you've left on a doc\n`,
         "README.txt",
       );
       await zip.add(

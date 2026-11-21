@@ -34,7 +34,7 @@ const BrandMark = ({ className = "" }: { className?: string }) => (
   <span
     className={`text-[15px] font-bold tracking-tight text-white ${className}`}
   >
-    Project Teams
+    Araxys
   </span>
 );
 
@@ -713,7 +713,7 @@ export default function Landing() {
           </div>
         </div>
         <div className="mx-auto mt-8 max-w-6xl border-t border-white/[0.06] px-4 pt-6 text-center text-xs text-zinc-600">
-          © {new Date().getFullYear()} Project Teams · Crafted by Aman Ahmad
+          © {new Date().getFullYear()} Araxys · Crafted by Aman Ahmad
         </div>
       </footer>
     </div>

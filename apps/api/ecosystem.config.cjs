@@ -1,4 +1,4 @@
-// PM2 ecosystem for Project Teams — API + RAG worker.
+// PM2 ecosystem for Araxys — API + RAG worker.
 // Runs the compiled output: `npm ci && npm run build` before `pm2 startOrReload`.
 // Styled to match your avmg setup (absolute cwd, explicit log files, env_production).
 //

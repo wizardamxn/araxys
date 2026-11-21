@@ -29,7 +29,7 @@ const clip = (s: unknown, n = 300) => {
 export const summarize = (event: WebhookEvent | "ping", data: Data, workspace: string, link: (url: string, label: string) => string, bold: (s: string) => string) => {
   switch (event) {
     case "ping":
-      return `Test from Project Teams (${workspace}): this webhook works.`;
+      return `Test from Araxys (${workspace}): this webhook works.`;
     case "message.created":
       return `${bold(data.author?.name)} in ${link(appUrl(`/chat/${data.channel?.id}`), `#${data.channel?.name}`)}: ${clip(data.message?.text)}`;
     case "doc.created":
@@ -73,9 +73,9 @@ export const sign = (secret: string, body: string, timestamp = Math.floor(Date.n
 const send = async (hook: WebhookDoc, job: WebhookJob, attempt: number): Promise<PostResult> => {
   const body = JSON.stringify(formatBody(hook.format, job.payload as never));
   const result = await safePost(hook.url, body, {
-    "x-projectteams-event": job.event,
-    "x-projectteams-delivery": job.deliveryId,
-    "x-projectteams-signature": sign(hook.secret, body),
+    "x-araxys-event": job.event,
+    "x-araxys-delivery": job.deliveryId,
+    "x-araxys-signature": sign(hook.secret, body),
   });
 
   await WebhookDelivery.create({

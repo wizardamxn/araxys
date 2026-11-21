@@ -1,7 +1,7 @@
 {
-  "name": "projectteams",
+  "name": "araxys",
   "private": true,
-  "description": "Project Teams — team chat, docs and an AI knowledge base. See apps/api and apps/web.",
+  "description": "Araxys — team chat, docs and an AI knowledge base. See apps/api and apps/web.",
   "scripts": {
     "install:all": "npm ci --prefix apps/api && npm ci --prefix apps/web",
     "dev:api": "npm run dev --prefix apps/api",

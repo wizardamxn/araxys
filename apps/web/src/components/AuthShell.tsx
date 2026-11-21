@@ -34,7 +34,7 @@ export default function AuthShell({ children }: { children: ReactNode }) {
         <div className="relative z-10 max-w-md">
           <div className="mb-8">
             <span className="text-xl font-bold tracking-tight text-white">
-              Project Teams
+              Araxys
             </span>
           </div>
 

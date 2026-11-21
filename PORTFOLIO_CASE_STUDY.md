@@ -1,11 +1,11 @@
-# Portfolio Case Study: Project Teams
+# Portfolio Case Study: Araxys
 
 ### 1. METADATA HEADER
-* **Project Name:** **Project Teams** — A high-fidelity, real-time collaboration platform that merges instant messaging, collaborative document editing, active presence tracking, LLM-assisted authoring, and a retrieval-augmented (RAG) document Q&A engine into a unified, secure, multi-tenant workspace.
+* **Project Name:** **Araxys** — A high-fidelity, real-time collaboration platform that merges instant messaging, collaborative document editing, active presence tracking, LLM-assisted authoring, and a retrieval-augmented (RAG) document Q&A engine into a unified, secure, multi-tenant workspace.
 * **Links/Metadata:**
   * **Status:** LIVE IN PRODUCTION
-  * **Source Code:** [GitHub Repository](https://github.com/wizardamxn/projectteams)
-  * **Live Demo:** [projectteams.amanahmad.xyz](https://projectteams.amanahmad.xyz)
+  * **Source Code:** [GitHub Repository](https://github.com/wizardamxn/araxys)
+  * **Live Demo:** [araxys.amanahmad.xyz](https://araxys.amanahmad.xyz)
   * **Role:** Principal Full-Stack Engineer / Architect
   * **Team Size:** 1 (Solo Developer)
 * **Stack:**
@@ -58,7 +58,7 @@
 ---
 
 ### 3. OVERVIEW
-*Project Teams* is a high-performance, real-time collaboration ecosystem that merges messaging, collaborative digital workspaces, LLM-assisted authoring, and a retrieval-augmented document intelligence layer into a single unified workspace. Beyond live chat and co-editing, the platform lets a team **upload its own documents and then ask questions against them in natural language** — answers are grounded strictly in the team's own corpus and returned with source citations. Users can also invoke three synchronous AI authoring operations on any document via the integrated assistant panel: semantic tag extraction, text summarization, and tone/grammar refinement. The user experience is a dark-mode, high-fidelity single-page application (SPA) featuring smooth transitions, optimistic UI updates, and instant socket-driven messaging.
+*Araxys* is a high-performance, real-time collaboration ecosystem that merges messaging, collaborative digital workspaces, LLM-assisted authoring, and a retrieval-augmented document intelligence layer into a single unified workspace. Beyond live chat and co-editing, the platform lets a team **upload its own documents and then ask questions against them in natural language** — answers are grounded strictly in the team's own corpus and returned with source citations. Users can also invoke three synchronous AI authoring operations on any document via the integrated assistant panel: semantic tag extraction, text summarization, and tone/grammar refinement. The user experience is a dark-mode, high-fidelity single-page application (SPA) featuring smooth transitions, optimistic UI updates, and instant socket-driven messaging.
 
 Architecturally, the system is a decoupled, multi-process topology. A React/Vite SPA is served as static assets by Nginx, which also acts as the same-origin API gateway — reverse-proxying REST traffic and WebSocket upgrades to a monolithic Node.js/Express Backend-For-Frontend (BFF). Communication is split by workload: stateless CRUD, authentication, and synchronous AI completions travel over HTTPS REST, while real-time chat and presence ride persistent Socket.IO TCP connections. The heavy, CPU-bound RAG ingestion path is offloaded entirely to a **separate BullMQ/Redis worker process**, keeping the request-serving gateway responsive. Structured data lives in MongoDB (via Mongoose), raw document blobs in Supabase Storage, and vector embeddings in a MongoDB Atlas vector index. The whole stack runs on AWS EC2 under PM2, fronted by Cloudflare with Let's Encrypt TLS.
 
@@ -163,4 +163,4 @@ Modeled and validated through Mongoose across the MongoDB instance:
 ---
 
 ### 8. OUTCOME
-*Project Teams* is a **live, production-grade** collaboration platform that pairs low-latency real-time messaging with a genuinely useful document-intelligence layer. By decoupling CPU-bound ingestion onto a BullMQ/Redis worker, the API gateway stays responsive under load while documents are parsed, chunked, and embedded out of band. By pushing `teamCode` isolation all the way down into the `$vectorSearch` candidate-generation stage, every layer — REST queries, sockets, and semantic retrieval — respects strict tenant boundaries, and grounded, citation-backed LLM answers eliminate hallucination. The same-origin Nginx gateway, PM2 process supervision, and Cloudflare + Let's Encrypt TLS turn a Docker-dev prototype into a hardened, HTTPS-served deployment on AWS EC2 — demonstrating end-to-end ownership from real-time systems design through RAG architecture to operating the stack in production.
+*Araxys* is a **live, production-grade** collaboration platform that pairs low-latency real-time messaging with a genuinely useful document-intelligence layer. By decoupling CPU-bound ingestion onto a BullMQ/Redis worker, the API gateway stays responsive under load while documents are parsed, chunked, and embedded out of band. By pushing `teamCode` isolation all the way down into the `$vectorSearch` candidate-generation stage, every layer — REST queries, sockets, and semantic retrieval — respects strict tenant boundaries, and grounded, citation-backed LLM answers eliminate hallucination. The same-origin Nginx gateway, PM2 process supervision, and Cloudflare + Let's Encrypt TLS turn a Docker-dev prototype into a hardened, HTTPS-served deployment on AWS EC2 — demonstrating end-to-end ownership from real-time systems design through RAG architecture to operating the stack in production.
