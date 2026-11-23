@@ -45,6 +45,12 @@ const schema = z.object({
   // APP_URL + /api/auth/google/callback (right for the same-origin deployment).
   GOOGLE_REDIRECT_URI: z.string().url().optional(),
 
+  // Email: SMTP (e.g. Gmail + app password) wins over Resend. Either one set =
+  // new accounts must verify their email with a one-time code.
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().int().positive().default(465),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
   RESEND_API_KEY: z.string().optional(),
   MAIL_FROM: z.string().default("Araxys <no-reply@localhost>"),
 

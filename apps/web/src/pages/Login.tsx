@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import { Mail, Lock, ArrowRight, Loader2, Eye, EyeOff } from "@/components/icons";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/store/hooks";
-import { useLogin } from "@/api/auth";
+import { isAxiosError } from "axios";
+import { useLogin, verifyEmailPath } from "@/api/auth";
 import { errorMessage } from "@/lib/api";
 import AuthShell from "@/components/AuthShell";
 import GoogleButton from "@/components/GoogleButton";
@@ -52,7 +53,14 @@ export default function Login() {
       { email, password },
       {
         onSuccess: () => navigate(next ?? "/dashboard", { replace: true }),
-        onError: (err) => setError(errorMessage(err, "Invalid credentials. Please try again.")),
+        onError: (err) => {
+          // Signed up but never entered the code: the server just emailed a fresh one.
+          if (isAxiosError(err) && err.response?.data?.code === "email_unverified") {
+            navigate(verifyEmailPath(email.trim().toLowerCase(), next));
+            return;
+          }
+          setError(errorMessage(err, "Invalid credentials. Please try again."));
+        },
       },
     );
   };

@@ -20,6 +20,12 @@ export interface IUser {
   passwordChangedAt?: Date;
   resetTokenHash?: string;
   resetTokenExpires?: Date;
+  /** false = signed up but hasn't entered the emailed code yet. Missing (older accounts, Google) counts as verified. */
+  emailVerified?: boolean;
+  otpHash?: string;
+  otpExpires?: Date;
+  otpAttempts?: number;
+  otpSentAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -51,6 +57,11 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     passwordChangedAt: { type: Date },
     resetTokenHash: { type: String, select: false },
     resetTokenExpires: { type: Date, select: false },
+    emailVerified: { type: Boolean },
+    otpHash: { type: String, select: false },
+    otpExpires: { type: Date, select: false },
+    otpAttempts: { type: Number, select: false },
+    otpSentAt: { type: Date, select: false },
   },
   { timestamps: true },
 );
@@ -72,6 +83,10 @@ userSchema.set("toJSON", {
     delete out.password;
     delete out.resetTokenHash;
     delete out.resetTokenExpires;
+    delete out.otpHash;
+    delete out.otpExpires;
+    delete out.otpAttempts;
+    delete out.otpSentAt;
     delete out.googleId;
     delete out.__v;
     return out;

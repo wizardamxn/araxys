@@ -11,7 +11,7 @@ import {
   AlertCircle,
 } from "@/components/icons";
 import { useState } from "react";
-import { useRegister } from "@/api/auth";
+import { useRegister, verifyEmailPath } from "@/api/auth";
 import { errorMessage } from "@/lib/api";
 import AuthShell from "@/components/AuthShell";
 import GoogleButton from "@/components/GoogleButton";
@@ -40,7 +40,8 @@ export default function Signup() {
       { fullName, email, password },
       {
         // New accounts have no workspace yet: onboarding, unless they came from an invite.
-        onSuccess: () => navigate(next ?? "/onboarding"),
+        onSuccess: (data) =>
+          navigate(data.verify ? verifyEmailPath(email.trim().toLowerCase(), next) : (next ?? "/onboarding")),
         onError: (err) => setError(errorMessage(err, "Failed to create account. Please try again.")),
       },
     );

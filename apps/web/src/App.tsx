@@ -17,6 +17,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import VerifyEmail from "./pages/VerifyEmail";
 import Dashboard from "./pages/Dashboard";
 import Documents from "./pages/Documents";
 import Editor from "./pages/Editor";
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
   { path: "/signup", element: <Signup /> },
   { path: "/forgot-password", element: <ForgotPassword /> },
   { path: "/reset-password", element: <ResetPassword /> },
+  { path: "/verify-email", element: <VerifyEmail /> },
   { path: "/invite/:token", element: <InvitePage /> },
 
   // --- Private routes ---

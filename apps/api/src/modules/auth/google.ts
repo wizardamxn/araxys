@@ -108,6 +108,11 @@ export const signInWithGoogle = async (code: string): Promise<UserDoc> => {
   if (byEmail) {
     byEmail.googleId = claims.sub;
     byEmail.avatarUrl ??= claims.picture;
+    if (byEmail.emailVerified === false) {
+      // Whoever set that password never proved they own the email: drop it.
+      byEmail.password = undefined;
+      byEmail.emailVerified = true;
+    }
     return byEmail.save();
   }
 

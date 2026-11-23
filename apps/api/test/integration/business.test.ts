@@ -20,7 +20,7 @@ vi.mock("../../src/queues/ragQueue.js", () => ({
   enqueueDocIndex: vi.fn(async () => null),
   enqueueChatIndex: vi.fn(async () => null),
 }));
-vi.mock("../../src/lib/mailer.js", () => ({ sendMail: vi.fn(async () => undefined) }));
+vi.mock("../../src/lib/mailer.js", () => ({ sendMail: vi.fn(async () => undefined), mailConfigured: () => false }));
 
 const { createApp } = await import("../../src/app.js");
 const { AuditEvent } = await import("../../src/models/auditEvent.js");

@@ -4,6 +4,7 @@ import request from "supertest";
 const { sent } = vi.hoisted(() => ({ sent: [] as { to: string; text: string }[] }));
 vi.mock("../../src/lib/mailer.js", () => ({
   sendMail: vi.fn(async (mail: { to: string; text: string }) => void sent.push(mail)),
+  mailConfigured: () => false,
 }));
 
 const { createApp } = await import("../../src/app.js");

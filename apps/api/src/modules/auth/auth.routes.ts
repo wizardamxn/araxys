@@ -8,7 +8,9 @@ import {
   forgotPasswordSchema,
   loginSchema,
   registerSchema,
+  resendCodeSchema,
   resetPasswordSchema,
+  verifyEmailSchema,
 } from "./auth.schemas.js";
 import { authService } from "./auth.service.js";
 import { googleEnabled, readOAuthState, safeNextPath, signInWithGoogle, startGoogleSignIn } from "./google.js";
@@ -21,7 +23,10 @@ export const authRouter = Router();
 const baseCookie: CookieOptions = { httpOnly: true, sameSite: "lax", secure: config.COOKIE_SECURE };
 const sessionCookie: CookieOptions = { ...baseCookie, maxAge: JWT_TTL_SECONDS * 1000 };
 
-authRouter.use(["/login", "/register", "/forgot-password", "/reset-password"], authLimiter);
+authRouter.use(
+  ["/login", "/register", "/forgot-password", "/reset-password", "/verify-email", "/resend-code"],
+  authLimiter,
+);
 
 authRouter.post("/login", validateBody(loginSchema), async (req, res) => {
   const user = await authService.login(req.body);
@@ -31,8 +36,23 @@ authRouter.post("/login", validateBody(loginSchema), async (req, res) => {
 
 authRouter.post("/register", validateBody(registerSchema), async (req, res) => {
   const user = await authService.register(req.body);
+  // Unverified accounts get no session until they enter the emailed code.
+  if (user.emailVerified === false) {
+    return res.status(201).json({ message: "Check your email for a code", verify: true, email: user.email });
+  }
   res.cookie(AUTH_COOKIE, user.getJwtToken(), sessionCookie);
   res.status(201).json({ message: "User registered successfully" });
+});
+
+authRouter.post("/verify-email", validateBody(verifyEmailSchema), async (req, res) => {
+  const user = await authService.verifyEmail(req.body);
+  res.cookie(AUTH_COOKIE, user.getJwtToken(), sessionCookie);
+  res.json(user);
+});
+
+authRouter.post("/resend-code", validateBody(resendCodeSchema), async (req, res) => {
+  await authService.resendCode(req.body.email);
+  res.json({ message: "If that account still needs verifying, a new code is on its way." });
 });
 
 authRouter.post("/forgot-password", validateBody(forgotPasswordSchema), async (req, res) => {

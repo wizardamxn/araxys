@@ -1,10 +1,14 @@
-import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import request from "supertest";
 
 // Capture outgoing email so the test can read the reset link.
-const { sent } = vi.hoisted(() => ({ sent: [] as { to: string; text: string }[] }));
+const { sent, mail } = vi.hoisted(() => ({
+  sent: [] as { to: string; text: string }[],
+  mail: { on: false }, // flips email verification on for the OTP tests
+}));
 vi.mock("../../src/lib/mailer.js", () => ({
-  sendMail: vi.fn(async (mail: { to: string; text: string }) => void sent.push(mail)),
+  sendMail: vi.fn(async (m: { to: string; text: string }) => void sent.push(m)),
+  mailConfigured: () => mail.on,
 }));
 
 const { createApp } = await import("../../src/app.js");
@@ -92,6 +96,58 @@ describe("password reset", () => {
       .post("/api/auth/reset-password")
       .send({ email, teamCode: "11111111", newPassword: "hijacked123" })
       .expect(400);
+  });
+});
+
+describe("email verification (OTP)", () => {
+  const codeIn = (i = sent.length - 1) => /code is (\d{6})/.exec(sent[i]!.text)?.[1];
+  const register = (email = "otp@example.com") =>
+    request(app).post("/api/auth/register").send({ fullName: "Otp User", email, password: "password123" });
+
+  beforeEach(() => void (mail.on = true));
+  afterEach(() => void (mail.on = false));
+
+  it("registers without a session, emails a code, and the code signs you in once", async () => {
+    const res = await register().expect(201);
+    expect(res.body).toMatchObject({ verify: true, email: "otp@example.com" });
+    expect(String(res.headers["set-cookie"] ?? "")).not.toMatch(/token=/);
+    expect(sent).toHaveLength(1);
+    const code = codeIn()!;
+
+    // Login is blocked until verified.
+    const blocked = await request(app).post("/api/auth/login").send({ email: "otp@example.com", password: "password123" }).expect(403);
+    expect(blocked.body.code).toBe("email_unverified");
+
+    const agent = request.agent(app);
+    const ok = await agent.post("/api/auth/verify-email").send({ email: "otp@example.com", code }).expect(200);
+    expect(ok.body.otpHash).toBeUndefined();
+    await agent.get("/api/profile/profile").expect(200);
+
+    // Single use; login now works.
+    await request(app).post("/api/auth/verify-email").send({ email: "otp@example.com", code }).expect(400);
+    await request(app).post("/api/auth/login").send({ email: "otp@example.com", password: "password123" }).expect(200);
+  });
+
+  it("locks the code after 5 wrong tries", async () => {
+    await register().expect(201);
+    const code = codeIn()!;
+    const wrong = code === "000000" ? "111111" : "000000";
+    for (let i = 0; i < 5; i++) {
+      await request(app).post("/api/auth/verify-email").send({ email: "otp@example.com", code: wrong }).expect(400);
+    }
+    await request(app).post("/api/auth/verify-email").send({ email: "otp@example.com", code }).expect(400);
+  });
+
+  it("resend respects the 60s cooldown and never reveals accounts", async () => {
+    await register().expect(201);
+    await request(app).post("/api/auth/resend-code").send({ email: "otp@example.com" }).expect(200);
+    await request(app).post("/api/auth/resend-code").send({ email: "ghost@example.com" }).expect(200);
+    expect(sent).toHaveLength(1); // only the signup email
+  });
+
+  it("rejects a malformed code", async () => {
+    await register().expect(201);
+    await request(app).post("/api/auth/verify-email").send({ email: "otp@example.com", code: "12ab" }).expect(400);
   });
 });
 

@@ -19,10 +19,27 @@ export const useRegister = () => {
   const dispatch = useAppDispatch();
   return useMutation({
     mutationFn: (input: { fullName: string; email: string; password: string }) =>
-      api.post("/auth/register", input),
+      api.post<{ verify?: boolean }>("/auth/register", input).then((r) => r.data),
+    // `verify` = no session yet: the user must enter the emailed code first.
+    onSuccess: (data) => (data.verify ? undefined : dispatch(checkAuth()).unwrap()),
+  });
+};
+
+export const useVerifyEmail = () => {
+  const dispatch = useAppDispatch();
+  return useMutation({
+    mutationFn: (input: { email: string; code: string }) =>
+      api.post<User>("/auth/verify-email", input).then((r) => r.data),
     onSuccess: () => dispatch(checkAuth()).unwrap(),
   });
 };
+
+export const useResendCode = () =>
+  useMutation({ mutationFn: (email: string) => api.post("/auth/resend-code", { email }) });
+
+/** Where to send someone who still has to enter their emailed code. */
+export const verifyEmailPath = (email: string, next: string | null) =>
+  `/verify-email?email=${encodeURIComponent(email)}${next ? `&next=${encodeURIComponent(next)}` : ""}`;
 
 export const useLogout = () => {
   const dispatch = useAppDispatch();
